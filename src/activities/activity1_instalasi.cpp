@@ -2,23 +2,31 @@
 
 /*
  * Activity 1: Instalasi (Installation)
- * Purpose: Verify OpenGL installation and display a basic triangle
+ * Purpose: Verify OpenGL installation and display a black square
+ * Based on: square.cpp by Sumanta Guha
  */
 
 void runActivity1() {
-    // Initialize OpenGL window
-    GLFWwindow* window = initializeOpenGL("Activity 1: Instalasi", 640, 480);
+    // Initialize OpenGL window (500x500 to match original example)
+    GLFWwindow* window = initializeOpenGL("square.cpp", 500, 500);
     if (!window) return;
 
-    // Set clear color
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    // Set clear color to white (matching original example)
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-    // Vertex data: position (x, y, z) and color (r, g, b)
+    // Vertex data: Square from (20,20) to (80,80) in 0-100 coordinate space
+    // We draw it as 2 triangles (6 vertices total)
+    // Format: position (x, y, z)
     float vertices[] = {
-        // positions         // colors
-        -0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom left (red)
-         0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom right (green)
-         0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top (blue)
+        // First triangle (bottom-left, bottom-right, top-right)
+        20.0f, 20.0f, 0.0f,
+        80.0f, 20.0f, 0.0f,
+        80.0f, 80.0f, 0.0f,
+
+        // Second triangle (bottom-left, top-right, top-left)
+        20.0f, 20.0f, 0.0f,
+        80.0f, 80.0f, 0.0f,
+        20.0f, 80.0f, 0.0f
     };
 
     // Create and bind VAO
@@ -30,30 +38,54 @@ void runActivity1() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    // Position attribute (only position, no color per vertex)
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    // Create custom shaders with orthographic projection
+    const char* vertexShaderSource = "#version 410 core\n"
+        "layout (location = 0) in vec3 aPos;\n"
+        "uniform mat4 projection;\n"
+        "void main() {\n"
+        "   gl_Position = projection * vec4(aPos, 1.0);\n"
+        "}\0";
 
-    // Create shader program
-    unsigned int shaderProgram = createShaderProgram(DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER);
+    const char* fragmentShaderSource = "#version 410 core\n"
+        "out vec4 FragColor;\n"
+        "void main() {\n"
+        "   FragColor = vec4(0.0, 0.0, 0.0, 1.0);  // Black color\n"
+        "}\0";
+
+    unsigned int shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
+
+    // Create orthographic projection matrix (0-100 coordinate space)
+    // This is equivalent to glOrtho(0.0, 100.0, 0.0, 100.0, -1.0, 1.0)
+    float projectionMatrix[16] = {
+        2.0f/100.0f,  0.0f,          0.0f,  0.0f,
+        0.0f,         2.0f/100.0f,   0.0f,  0.0f,
+        0.0f,         0.0f,         -1.0f,  0.0f,
+       -1.0f,        -1.0f,          0.0f,  1.0f
+    };
+
+    // Set the projection matrix uniform
+    glUseProgram(shaderProgram);
+    int projLoc = glGetUniformLocation(shaderProgram, "projection");
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, projectionMatrix);
 
     printf("Activity 1: Installation Test\n");
-    printf("A colored triangle should appear on screen.\n");
+    printf("A black square should appear on white background.\n");
+    printf("Square position: (20, 20) to (80, 80) in 100x100 coordinate space\n");
     printf("Press ESC to close.\n");
 
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
-        // Clear the screen
+        // Clear the screen to white
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Render the triangle
+        // Render the square
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);  // Draw 6 vertices (2 triangles)
 
         // Swap buffers and poll events
         glfwSwapBuffers(window);

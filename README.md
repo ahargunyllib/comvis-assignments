@@ -82,7 +82,18 @@ make run ACTIVITY=4         # Build and run Activity 4
 ### Activity 1: Instalasi (Installation Test)
 **File:** `src/activities/activity1_instalasi.cpp`
 
-TBD
+Verifies OpenGL installation by displaying a simple black square on a white background. Uses modern OpenGL with orthographic projection.
+
+**Purpose:**
+- Confirm OpenGL and GLFW are correctly installed
+- Test basic rendering pipeline with VAO/VBO
+- Demonstrate orthographic projection (0-100 coordinate space)
+
+**Visual Output:**
+- White background (500x500 window)
+- Black square positioned at (20, 20) to (80, 80)
+
+**Based on:** square.cpp by Sumanta Guha (converted to modern OpenGL)
 
 **Run:**
 ```bash
