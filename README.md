@@ -161,10 +161,50 @@ Demonstrates bilinear color interpolation using GPU rasterization. A square with
 
 ---
 
-### Activity 4: Bull's Eye Target
+### Activity 4: Circular Annuluses (Bull's Eye)
 **File:** `src/activities/activity4_bulls_eye.cpp`
 
-TBD
+Demonstrates three different techniques for drawing circular annuluses (ring shapes), showing the evolution from simple overwriting to proper geometric rings.
+
+**Purpose:**
+- Compare different approaches to rendering ring shapes
+- Understand depth testing in OpenGL
+- Learn triangle strip geometry for efficient ring rendering
+- Practice polygon mode switching (filled vs wireframe)
+
+**Three Techniques Demonstrated:**
+
+1. **Upper Left - "Overwritten"**: Simple but imprecise
+   - Red disc (radius 20) at z=0
+   - White disc (radius 10) at z=0 painted over it
+   - Creates appearance of ring but actually overlapping geometry
+
+2. **Upper Right - "Floating"**: Multi-colored bull's eye with depth testing
+   - 5 concentric colored discs at different z-depths demonstrating depth testing
+   - Colors from outside to center: **Green → Red → Blue → Yellow → Purple**
+   - Each disc at progressively higher z-value (0.0 to 0.4)
+   - Depth testing makes inner discs appear in front
+   - Demonstrates layered rendering with depth buffer
+
+3. **Lower - "The Real Deal"**: Proper ring geometry
+   - True ring using GL_TRIANGLE_STRIP
+   - Inner radius 10, outer radius 20
+   - Efficient vertex sharing between triangles
+   - **Interactive:** Press SPACE to toggle wireframe mode
+
+**Visual Output:**
+- White background (500x500 window)
+- Three annuluses demonstrating different techniques:
+  - **Upper left (25, 75)**: Red-white ring ("Overwritten" technique)
+  - **Upper right (75, 75)**: Multi-colored bull's eye ("Floating" technique)
+  - **Lower center (50, 30)**: Red-white ring ("The Real Deal" technique)
+- Console output provides detailed descriptions of each technique
+
+**Controls:**
+- **SPACE** - Toggle wireframe for lower annulus
+- **ESC** - Close window
+
+**Based on:** circularAnnuluses.cpp by Sumanta Guha
 
 **Run:**
 ```bash
