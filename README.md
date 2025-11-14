@@ -134,7 +134,23 @@ Demonstrates viewport clipping using a simple right triangle. The triangle geome
 ### Activity 3: Color Interpolation
 **File:** `src/activities/activity3_color_interpolation.cpp`
 
-TBD
+Demonstrates bilinear color interpolation using GPU rasterization. A square with different colors at each corner creates a smooth gradient across the entire surface.
+
+**Purpose:**
+- Show how GPU interpolates vertex attributes (colors) across primitives
+- Demonstrate bilinear interpolation
+- Visualize color blending in 2D space
+
+**Visual Output:**
+- White background (500x500 window)
+- Square (10, 10) to (90, 90) with corner colors:
+  - Bottom-left: **Red**
+  - Bottom-right: **Green**
+  - Top-left: **Yellow**
+  - Top-right: **Blue**
+- Smooth color gradient between all corners
+
+**Based on:** Experiment 2.7 - Four-corner color gradient
 
 **Run:**
 ```bash
