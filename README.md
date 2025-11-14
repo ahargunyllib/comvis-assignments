@@ -107,7 +107,20 @@ Verifies OpenGL installation by displaying a simple black square on a white back
 ### Activity 2: Clipping
 **File:** `src/activities/activity2_clipping.cpp`
 
-TBD
+Demonstrates viewport clipping using a simple right triangle. The triangle geometry makes clipping behavior more obvious for educational purposes.
+
+**Purpose:**
+- Visualize clipping at viewport boundaries
+- Foundation for implementing clipping algorithms
+- Simpler geometry than square for dramatic clipping illustration
+
+**Visual Output:**
+- White background (500x500 window)
+- Black right triangle with vertices at (20, 20), (80, 20), (80, 80)
+
+**Based on:** Experiment 2.6 - Triangle for clipping demonstration
+
+**TODO:** Implement Cohen-Sutherland or Liang-Barsky clipping algorithms
 
 **Run:**
 ```bash
